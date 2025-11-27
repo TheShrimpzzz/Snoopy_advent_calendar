@@ -1,144 +1,148 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Calendario de Adviento para Ti ❤️</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendario de Adviento para Mi Amor</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(#dff6ff, #ffffff);
+            background-attachment: fixed;
+            padding: 20px;
+            text-align: center;
+        }
 
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: url("https://i.imgur.com/Gyqyr4x.png");
-        background-size: cover;
-        background-attachment: fixed;
-        background-position: center;
-        font-family: "Poppins", sans-serif;
-        color: #fff;
-        overflow-x: hidden;
-    }
+        h1 {
+            font-size: 2.3rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
 
-    h1 {
-        text-align: center;
-        margin-top: 40px;
-        font-size: 40px;
-        text-shadow: 0 0 10px #ffebcd;
-    }
+        .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #555;
+        }
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-        width: 90%;
-        margin: 40px auto;
-    }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-    .day {
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(6px);
-        padding: 25px;
-        border-radius: 20px;
-        text-align: center;
-        font-size: 24px;
-        cursor: pointer;
-        transition: 0.3s;
-        border: 2px solid rgba(255,255,255,0.3);
-        position: relative;
-        overflow: hidden;
-    }
+        .day {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
 
-    .day:hover {
-        transform: scale(1.1);
-        background: rgba(255,255,255,0.22);
-    }
+        .day:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
 
-    .modal {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.7);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+        /* POPUP */
+        .popup-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .modal-content {
-        background: #fff;
-        color: #333;
-        padding: 30px;
-        border-radius: 20px;
-        max-width: 500px;
-        width: 100%;
-        max-height: 80%;
-        overflow-y: auto;
-        text-align: center;
-        position: relative;
-    }
+        .popup {
+            background: white;
+            padding: 25px;
+            width: 85%;
+            max-width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
 
-    .close {
-        position: absolute;
-        top: 10px; right: 20px;
-        cursor: pointer;
-        font-size: 26px;
-        color: #333;
-    }
-
-    img {
-        max-width: 100%;
-        border-radius: 10px;
-        margin-top: 10px;
-    }
-
-    audio {
-        margin-top: 15px;
-        width: 100%;
-    }
-</style>
+        .close {
+            margin-top: 15px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
-
 <body>
-<h1>🎄 Calendario de Adviento para Mi Amor ❤️</h1>
+    <h1>🎄 Calendario de Adviento para Ti ❤️</h1>
+    <div class="subtitle">Cada día tiene una sorpresita especial ✨</div>
 
-<div class="grid">
+    <div class="calendar" id="calendar"></div>
+
+    <div class="popup-bg" id="popup-bg">
+        <div class="popup">
+            <div id="popup-text"></div>
+            <button class="close" onclick="closePopup()">Cerrar</button>
+        </div>
+    </div>
+
     <script>
+        const mensajes = {
+            1: "Te quiero muchísimo. Gracias por alegrar mi vida 💛",
+            2: "Hoy toca helado virtual 🍦 y un abrazo real cuando nos veamos.",
+            3: "Dato random: Snoopy también piensa en ti 🐶✨",
+            4: "Prometo darte un beso sorpresa hoy 😘",
+            5: "Te mereces todo lo bonito del mundo 💫",
+            6: "Mini reto: mándame un emoji que te describa hoy.",
+            7: "Hoy toca foto bonita juntos (cuando podamos) 📸💞",
+            8: "Gracias por existir, amorcito ❤️",
+            9: "Reto: dime un recuerdo que te guste de nosotros ✨",
+            10: "Te mando un abracito virtual 🤗",
+            11: "Eres mi personita favorita 💛",
+            12: "Prometo sorprenderte esta semana 😎",
+            13: "Te extraño más de lo que crees 💕",
+            14: "Hoy toca canción dedicada 🎶",
+            15: "Me encanta cuando te ríes, es de mis cosas favoritas ✨",
+            16: "Mini juego: adivina cuántos besos te debo hoy 😘",
+            17: "Hoy te pienso más de lo normal 🌙",
+            18: "Dato: eres lo mejor que me pasó este año ✨",
+            19: "Te mando un Snoopy abrazándote muy fuerte 🐶💛",
+            20: "Reto: descríbeme con 3 palabras 🫶",
+            21: "Cuando estamos juntos todo es más bonito ✨",
+            22: "Hoy te toca un halago: eres increíble 💋",
+            23: "Falta poquito para Navidad 🎄 pero tú ya eres mi regalo 💗",
+            24: "Gracias por compartir tu vida conmigo. Te amo ❤️🎄"
+        };
+
+        const calendar = document.getElementById("calendar");
+
         for (let i = 1; i <= 24; i++) {
-            document.write(`<div class="day" onclick="openDay(${i})">${i}</div>`);
+            const day = document.createElement("div");
+            day.className = "day";
+            day.textContent = i;
+            day.onclick = () => openPopup(i);
+            calendar.appendChild(day);
+        }
+
+        function openPopup(day) {
+            document.getElementById("popup-text").textContent = mensajes[day];
+            document.getElementById("popup-bg").style.display = "flex";
+        }
+
+        function closePopup() {
+            document.getElementById("popup-bg").style.display = "none";
         }
     </script>
-</div>
-
-<div id="modal" class="modal">
-    <div class="modal-content" id="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-    </div>
-</div>
-
-<script>
-const sorpresas = {
-    1: `<h2>Día 1 💕</h2>
-        <p>Este es el primer día de un diciembre especial contigo ❤️</p>
-        <img src="https://i.imgur.com/z7oRzv9.png" alt="Snoopy Love">`,
-
-    2: `<h2>Día 2 ❄️</h2>
-        <p>Pronto agregaré más sorpresas 😘</p>`,
-
-    3: `<h2>Día 3 🎶</h2>
-        <p>Una canción especial para ti 🎵</p>
-        <audio controls src=""></audio>`,
-};
-function openDay(num) {
-    document.getElementById("modal-content").innerHTML =
-        `<span class='close' onclick='closeModal()'>&times;</span>` + 
-        (sorpresas[num] || "<h2>Aún no lleno este día 🤭</h2>");
-
-    document.getElementById("modal").style.display = "flex";
-}
-
-function closeModal() {
-    document.getElementById("modal").style.display = "none";
-}
-</script>
-
 </body>
 </html>
